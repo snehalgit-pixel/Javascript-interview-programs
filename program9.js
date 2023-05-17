@@ -1,20 +1,32 @@
 // Longest substring with non-repeating characters
+// O(n^3)
 
-// Needs revision and improvement
+function checkDistinct(str, i, j) {
+    var visited = new Array(26);
+    for (let k=0; k < 26; k++) {
+        visited[k] = false;
+    }
+
+    for (let k=i; k <= j; k++) {
+        if (visited[str.charCodeAt(k) - 65]) {
+            return false;
+        }
+        visited[str.charCodeAt(k) - 65] = true;
+    }
+    return true;
+}
+
 function longestUniqueSubstring(str) {
-    let n = str.length;
-    let res = 0;
-    let lastIndex = new Array(256);
-    for (let k=0; k < 256; k++) {
-        lastIndex[k] = -1;
+    let result = 0;
+    str = str.toUpperCase();
+    for (let i=0; i < str.length; i++) {
+        for (let j=i; j < str.length; j++) {
+            if (checkDistinct(str, i, j)) {
+                result = Math.max(result, j-i+1);
+            }
+        }
     }
-    let i = 0;
-    for (let j=0; j<n; j++) {
-        i = Math.max(i, lastIndex[str.charAt(j)] + 1);
-        res = Math.max(res, j-i+1);
-        lastIndex[str.charAt(j)] = j;
-    }
-    return res;
+    return result;
 }
 
 console.log(longestUniqueSubstring("ABDEFGABEF"));
